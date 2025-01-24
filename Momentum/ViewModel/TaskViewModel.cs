@@ -1,5 +1,10 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
+using Momentum.Models;
+using SQLite;
+
+
+
 
 public class TaskViewModel : BaseViewModel
 {

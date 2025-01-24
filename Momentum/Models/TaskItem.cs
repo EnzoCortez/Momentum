@@ -1,6 +1,6 @@
 ﻿using SQLite;
 
-namespace TaskApp.Models
+namespace Momentum.Models
 {
     public class TaskItem
     {
@@ -10,6 +10,6 @@ namespace TaskApp.Models
         public string Description { get; set; }
         public bool IsCompleted { get; set; }
         public string Category { get; set; }
-        public int Priority { get; set; }
+        public string Priority { get; set; }
     }
 }
