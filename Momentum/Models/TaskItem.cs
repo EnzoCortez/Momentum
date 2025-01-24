@@ -2,7 +2,7 @@
 
 namespace TaskApp.Models
 {
-    public class TaskModel
+    public class TaskItem
     {
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
