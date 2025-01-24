@@ -1,55 +1,58 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Momentum.Models;
-using SQLite;
+using Momentum.Services;
 
-
-
-
-public class TaskViewModel : BaseViewModel
+namespace Momentum.ViewModels
 {
-    private readonly TaskService _taskService;
-    public ObservableCollection<TaskItem> Tasks { get; set; } = new();
-
-    public ICommand LoadTasksCommand { get; }
-    public ICommand AddTaskCommand { get; }
-    public ICommand DeleteTaskCommand { get; }
-    public ICommand UpdateTaskCommand { get; }
-
-    public TaskViewModel()
+    public class TaskViewModel : BaseViewModel
     {
-        _taskService = new TaskService();
-        LoadTasksCommand = new Command(async () => await LoadTasks());
-        AddTaskCommand = new Command<TaskItem>(async (task) => await AddTask(task));
-        DeleteTaskCommand = new Command<int>(async (id) => await DeleteTask(id));
-        UpdateTaskCommand = new Command<TaskItem>(async (task) => await UpdateTask(task));
-    }
+        private readonly TaskDatabase _database;
+        public ObservableCollection<TaskItem> Tasks { get; set; } = new();
 
-    private async Task LoadTasks()
-    {
-        Tasks.Clear();
-        var tasks = await _taskService.GetTasksAsync();
-        foreach (var task in tasks)
+        public ICommand LoadTasksCommand { get; }
+        public ICommand AddTaskCommand { get; }
+        public ICommand DeleteTaskCommand { get; }
+        public ICommand UpdateTaskCommand { get; }
+
+        public TaskViewModel(TaskDatabase database)
         {
-            Tasks.Add(task);
+            _database = database;
+
+            LoadTasksCommand = new Command(async () => await LoadTasks());
+            AddTaskCommand = new Command<TaskItem>(async (task) => await AddTask(task));
+            DeleteTaskCommand = new Command<TaskItem>(async (task) => await DeleteTask(task));
+            UpdateTaskCommand = new Command<TaskItem>(async (task) => await UpdateTask(task));
+
+            LoadTasksCommand.Execute(null);
         }
-    }
 
-    private async Task AddTask(TaskItem task)
-    {
-        await _taskService.AddTaskAsync(task);
-        await LoadTasks();
-    }
+        private async Task LoadTasks()
+        {
+            Tasks.Clear();
+            var tasks = await _database.GetTasksAsync();
+            foreach (var task in tasks)
+            {
+                Tasks.Add(task);
+            }
+        }
 
-    private async Task UpdateTask(TaskItem task)
-    {
-        await _taskService.UpdateTaskAsync(task);
-        await LoadTasks();
-    }
+        private async Task AddTask(TaskItem task)
+        {
+            await _database.SaveTaskAsync(task);
+            await LoadTasks();
+        }
 
-    private async Task DeleteTask(int id)
-    {
-        await _taskService.DeleteTaskAsync(id);
-        await LoadTasks();
+        private async Task UpdateTask(TaskItem task)
+        {
+            await _database.SaveTaskAsync(task);
+            await LoadTasks();
+        }
+
+        private async Task DeleteTask(TaskItem task)
+        {
+            await _database.DeleteTaskAsync(task);
+            await LoadTasks();
+        }
     }
 }

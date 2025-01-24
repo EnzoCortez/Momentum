@@ -1,25 +1,22 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Momentum;
+using Momentum.Services;
 
-namespace Momentum
+public static class MauiProgram
 {
-    public static class MauiProgram
+    public static MauiApp CreateMauiApp()
     {
-        public static MauiApp CreateMauiApp()
-        {
-            var builder = MauiApp.CreateBuilder();
-            builder
-                .UseMauiApp<App>()
-                .ConfigureFonts(fonts =>
-                {
-                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                });
+        var builder = MauiApp.CreateBuilder();
+        builder
+            .UseMauiApp<App>()
+            .ConfigureFonts(fonts =>
+            {
+                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+            });
 
-#if DEBUG
-    		builder.Logging.AddDebug();
-#endif
+        string dbPath = Path.Combine(FileSystem.AppDataDirectory, "Momentum.db3");
+        builder.Services.AddSingleton<TaskDatabase>(s => new TaskDatabase(dbPath));
 
-            return builder.Build();
-        }
+
+        return builder.Build();
     }
 }
