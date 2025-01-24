@@ -1,5 +1,6 @@
-﻿using Momentum;
+﻿using Momentum.ViewModels;
 using Momentum.Services;
+using Momentum.View;
 
 public static class MauiProgram
 {
@@ -15,7 +16,8 @@ public static class MauiProgram
 
         string dbPath = Path.Combine(FileSystem.AppDataDirectory, "Momentum.db3");
         builder.Services.AddSingleton<TaskDatabase>(s => new TaskDatabase(dbPath));
-
+        builder.Services.AddSingleton<TaskViewModel>();
+        builder.Services.AddSingleton<TaskPage>();
 
         return builder.Build();
     }
