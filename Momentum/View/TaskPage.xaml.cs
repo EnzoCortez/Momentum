@@ -1,9 +1,15 @@
-namespace Momentum.View;
+using Microsoft.Maui.Controls;
+using Momentum.ViewModels;
 
-public partial class TaskPage : ContentPage
+namespace Momentum.Views
 {
-	public TaskPage()
-	{
-		InitializeComponent();
-	}
+    public partial class TaskPage : ContentPage
+    {
+        public TaskPage()
+        {
+            InitializeComponent(); //  Carga el XAML correctamente
+            BindingContext = new TaskViewModel();
+            
+        }
+    }
 }

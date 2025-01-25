@@ -1,4 +1,4 @@
-﻿using Momentum.View;
+﻿using Momentum.Views;
 
 namespace Momentum
 {

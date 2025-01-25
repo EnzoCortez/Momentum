@@ -1,6 +1,7 @@
 ﻿using Momentum.ViewModels;
 using Momentum.Services;
-using Momentum.View;
+using Momentum.Views;
+using Momentum;
 
 public static class MauiProgram
 {

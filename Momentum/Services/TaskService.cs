@@ -1,34 +1,68 @@
 ﻿using Momentum.Models;
 using System.Net.Http.Json;
 
-
 public class TaskService
 {
-    private readonly HttpClient _httpClient;
-    private const string ApiUrl = "http://TU_IP_LOCAL:5000/api/tasks";
-
-    public TaskService()
-    {
-        _httpClient = new HttpClient();
-    }
+    private static readonly HttpClient _httpClient = new HttpClient();
+    private const string ApiUrl = "http://localhost:5122/api/Task";
 
     public async Task<List<TaskItem>> GetTasksAsync()
     {
-        return await _httpClient.GetFromJsonAsync<List<TaskItem>>(ApiUrl);
+        try
+        {
+            var response = await _httpClient.GetAsync(ApiUrl);
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadFromJsonAsync<List<TaskItem>>() ?? new List<TaskItem>();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al obtener tareas: {ex.Message}");
+            return new List<TaskItem>(); // Retorna lista vacía en caso de error
+        }
     }
 
-    public async Task AddTaskAsync(TaskItem task)
+    public async Task<bool> AddTaskAsync(TaskItem task)
     {
-        await _httpClient.PostAsJsonAsync(ApiUrl, task);
+        try
+        {
+            var response = await _httpClient.PostAsJsonAsync(ApiUrl, task);
+            response.EnsureSuccessStatusCode();
+            return response.IsSuccessStatusCode;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al agregar tarea: {ex.Message}");
+            return false;
+        }
     }
 
-    public async Task UpdateTaskAsync(TaskItem task)
+    public async Task<bool> UpdateTaskAsync(TaskItem task)
     {
-        await _httpClient.PutAsJsonAsync($"{ApiUrl}/{task.Id}", task);
+        try
+        {
+            var response = await _httpClient.PutAsJsonAsync($"{ApiUrl}/{task.Id}", task);
+            response.EnsureSuccessStatusCode();
+            return response.IsSuccessStatusCode;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al actualizar tarea: {ex.Message}");
+            return false;
+        }
     }
 
-    public async Task DeleteTaskAsync(int id)
+    public async Task<bool> DeleteTaskAsync(int id)
     {
-        await _httpClient.DeleteAsync($"{ApiUrl}/{id}");
+        try
+        {
+            var response = await _httpClient.DeleteAsync($"{ApiUrl}/{id}");
+            response.EnsureSuccessStatusCode();
+            return response.IsSuccessStatusCode;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al eliminar tarea: {ex.Message}");
+            return false;
+        }
     }
 }

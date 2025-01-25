@@ -4,7 +4,6 @@ using Momentum.Models;
 using Momentum.Services;
 
 namespace Momentum.ViewModels
-
 {
     public class TaskViewModel : BaseViewModel
     {
@@ -16,12 +15,15 @@ namespace Momentum.ViewModels
         public ICommand DeleteTaskCommand { get; }
         public ICommand UpdateTaskCommand { get; }
 
+        //  Constructor sin parámetros (necesario para XAML)
+        public TaskViewModel() { }
+
         public TaskViewModel(TaskDatabase database)
         {
-            _database = database;
+            _database = database ?? throw new ArgumentNullException(nameof(database));
 
             LoadTasksCommand = new Command(async () => await LoadTasks());
-            AddTaskCommand = new Command<TaskItem>(async (task) => await AddTask(task));
+            AddTaskCommand = new Command(async () => await OpenAddTaskForm());
             DeleteTaskCommand = new Command<TaskItem>(async (task) => await DeleteTask(task));
             UpdateTaskCommand = new Command<TaskItem>(async (task) => await UpdateTask(task));
 
@@ -40,20 +42,33 @@ namespace Momentum.ViewModels
 
         private async Task AddTask(TaskItem task)
         {
+            if (task == null) return;
+
             await _database.SaveTaskAsync(task);
+
+            var tasks = await _database.GetTasksAsync();
+            Console.WriteLine($"Tareas guardadas: {tasks.Count}");
+
             await LoadTasks();
         }
 
         private async Task UpdateTask(TaskItem task)
         {
+            if (task == null) return;
             await _database.SaveTaskAsync(task);
             await LoadTasks();
         }
 
         private async Task DeleteTask(TaskItem task)
         {
+            if (task == null) return;
             await _database.DeleteTaskAsync(task);
             await LoadTasks();
         }
+        private async Task OpenAddTaskForm()
+        {
+            await Shell.Current.GoToAsync(nameof(AddTaskPage)); 
+        }
+
     }
 }

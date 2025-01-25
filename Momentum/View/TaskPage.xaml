@@ -1,25 +1,73 @@
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:Momentum.ViewModels"
-             x:Class="Momentum.View.TaskPage">
+             x:Class="Momentum.Views.TaskPage"
+             Title="Momentum">
 
     <ContentPage.BindingContext>
-        <vm:TaskViewModel/>
+        <vm:TaskViewModel />
     </ContentPage.BindingContext>
 
-    <StackLayout Padding="20">
-        <ListView ItemsSource="{Binding Tasks}">
-            <ListView.ItemTemplate>
+    <Grid Padding="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Encabezado -->
+        <VerticalStackLayout Grid.Row="0" Spacing="10">
+            <Label Text="Momentum" FontSize="32" FontAttributes="Bold" TextColor="Black"/>
+            <Label Text="{Binding Tasks.Count, StringFormat='Tareas pendientes: {0}'}"
+                   FontSize="18" TextColor="Gray"/>
+        </VerticalStackLayout>
+
+        <!-- Lista de tareas -->
+        <CollectionView Grid.Row="1" ItemsSource="{Binding Tasks}" SelectionMode="None">
+            <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <ViewCell>
-                        <StackLayout Padding="10">
-                            <Label Text="{Binding Title}" FontSize="18" FontAttributes="Bold" />
-                            <Label Text="{Binding Description}" FontSize="14" />
-                            <Button Text="Eliminar" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:TaskViewModel}}, Path=DeleteTaskCommand}" CommandParameter="{Binding}" />
-                        </StackLayout>
-                    </ViewCell>
+                    <SwipeView>
+                        <SwipeView.LeftItems>
+                            <SwipeItems Mode="Execute">
+                                <SwipeItem Text="Eliminar" BackgroundColor="Red"
+                                           Command="{Binding BindingContext.DeleteTaskCommand, Source={x:Reference TaskPage}}"
+                                           CommandParameter="{Binding}" />
+                            </SwipeItems>
+                        </SwipeView.LeftItems>
+                        <SwipeView.RightItems>
+                            <SwipeItems Mode="Execute">
+                                <SwipeItem Text="Completado" BackgroundColor="Green"
+                                           Command="{Binding BindingContext.UpdateTaskCommand, Source={x:Reference TaskPage}}"
+                                           CommandParameter="{Binding}" />
+                            </SwipeItems>
+                        </SwipeView.RightItems>
+
+                        <Frame Padding="15" Margin="5" BackgroundColor="White"
+                               CornerRadius="10" >
+                            <VerticalStackLayout>
+                                <Label Text="{Binding Title}" FontSize="20" FontAttributes="Bold" TextColor="Black"/>
+                                <Label Text="{Binding Description}" FontSize="16" TextColor="Gray"/>
+                                <Label Text="{Binding DueDate, StringFormat='Fecha: {0:dd/MM/yyyy}'}"
+                                       FontSize="14" TextColor="Blue"/>
+                            </VerticalStackLayout>
+                        </Frame>
+                    </SwipeView>
                 </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-    </StackLayout>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- Botón flotante para agregar tareas -->
+        <Button Text="+" 
+                Command="{Binding AddTaskCommand}"
+                FontSize="24"
+                CornerRadius="50"
+                WidthRequest="60"
+                HeightRequest="60"
+                BackgroundColor="DodgerBlue"
+                TextColor="White"
+                Padding="0"
+                HorizontalOptions="End"
+                VerticalOptions="End"
+                TranslationY="-20"/>
+    </Grid>
 </ContentPage>
