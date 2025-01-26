@@ -18,13 +18,11 @@ namespace Momentum.Services
             return _database.Table<TaskItem>().ToListAsync();
         }
 
-        public Task<int> SaveTaskAsync(TaskItem task)
+        public async Task SaveTaskAsync(TaskItem task)
         {
-            if (task.Id == 0)
-                return _database.InsertAsync(task);
-            else
-                return _database.UpdateAsync(task);
+            await _database.InsertOrReplaceAsync(task);
         }
+
 
         public Task<int> DeleteTaskAsync(TaskItem task)
         {

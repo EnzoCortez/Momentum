@@ -1,0 +1,27 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Momentum.ViewModels"
+             x:Class="Momentum.Views.AddTaskPage"
+             Title="Añadir Tarea">
+
+    <ContentPage.BindingContext>
+        <vm:TaskViewModel />
+    </ContentPage.BindingContext>
+
+    <VerticalStackLayout Padding="20" Spacing="15">
+        <Entry Placeholder="Título" Text="{Binding NewTask.Title}" />
+        <Editor Placeholder="Descripción" Text="{Binding NewTask.Description}" />
+        <DatePicker Date="{Binding NewTask.DueDate}" />
+
+        <Button Text="Guardar" Command="{Binding SaveTaskCommand}" />
+
+        <!-- 🔹 Mostrar la última tarea guardada -->
+        <StackLayout IsVisible="{Binding SavedTask.Title, Converter={StaticResource StringNotEmptyConverter}}">
+            <Label Text="Última tarea creada:" FontAttributes="Bold" FontSize="Medium"/>
+            <Label Text="{Binding SavedTask.Title}" FontSize="Large" TextColor="Blue"/>
+            <Label Text="{Binding SavedTask.Description}" FontSize="Medium"/>
+            <Label Text="{Binding SavedTask.DueDate, StringFormat='Fecha: {0:dd/MM/yyyy}'}" FontSize="Small"/>
+        </StackLayout>
+
+    </VerticalStackLayout>
+</ContentPage>

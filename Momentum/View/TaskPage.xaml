@@ -57,17 +57,19 @@
         </CollectionView>
 
         <!-- Botón flotante para agregar tareas -->
-        <Button Text="+" 
-                Command="{Binding AddTaskCommand}"
-                FontSize="24"
-                CornerRadius="50"
-                WidthRequest="60"
-                HeightRequest="60"
-                BackgroundColor="DodgerBlue"
-                TextColor="White"
-                Padding="0"
-                HorizontalOptions="End"
-                VerticalOptions="End"
-                TranslationY="-20"/>
+        <Button 
+            Text="+" 
+            Command="{Binding AddTaskCommand}" 
+            BackgroundColor="Blue" 
+            TextColor="White"
+            FontSize="24"
+            CornerRadius="30"
+            WidthRequest="60"
+            HeightRequest="60"
+            HorizontalOptions="End"
+            VerticalOptions="End"
+            Padding="10"
+            Margin="20"/>
+
     </Grid>
 </ContentPage>

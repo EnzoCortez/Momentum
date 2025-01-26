@@ -1,10 +1,13 @@
 ﻿using Momentum.Models;
+using Newtonsoft.Json;  // ✅ Agregado para JsonConvert
 using System.Net.Http.Json;
+using System.Text;
+using System.Text.Json.Serialization;
 
 public class TaskService
 {
     private static readonly HttpClient _httpClient = new HttpClient();
-    private const string ApiUrl = "http://localhost:5122/api/Task";
+    private const string ApiUrl = "http://localhost:5122/api/Task";  // ✅ URL base corregida
 
     public async Task<List<TaskItem>> GetTasksAsync()
     {
@@ -17,7 +20,7 @@ public class TaskService
         catch (Exception ex)
         {
             Console.WriteLine($"Error al obtener tareas: {ex.Message}");
-            return new List<TaskItem>(); // Retorna lista vacía en caso de error
+            return new List<TaskItem>();  // ✅ Retorna lista vacía en caso de error
         }
     }
 
@@ -26,7 +29,6 @@ public class TaskService
         try
         {
             var response = await _httpClient.PostAsJsonAsync(ApiUrl, task);
-            response.EnsureSuccessStatusCode();
             return response.IsSuccessStatusCode;
         }
         catch (Exception ex)
@@ -41,7 +43,6 @@ public class TaskService
         try
         {
             var response = await _httpClient.PutAsJsonAsync($"{ApiUrl}/{task.Id}", task);
-            response.EnsureSuccessStatusCode();
             return response.IsSuccessStatusCode;
         }
         catch (Exception ex)
@@ -56,12 +57,27 @@ public class TaskService
         try
         {
             var response = await _httpClient.DeleteAsync($"{ApiUrl}/{id}");
-            response.EnsureSuccessStatusCode();
             return response.IsSuccessStatusCode;
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error al eliminar tarea: {ex.Message}");
+            return false;
+        }
+    }
+
+    public async Task<bool> AddTaskToServer(TaskItem task)
+    {
+        try
+        {
+            var json = JsonConvert.SerializeObject(task);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync(ApiUrl, content);  // ✅ Corregido
+            return response.IsSuccessStatusCode;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al sincronizar con API: {ex.Message}");
             return false;
         }
     }

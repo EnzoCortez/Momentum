@@ -19,6 +19,8 @@ public static class MauiProgram
         builder.Services.AddSingleton<TaskDatabase>(s => new TaskDatabase(dbPath));
         builder.Services.AddSingleton<TaskViewModel>();
         builder.Services.AddSingleton<TaskPage>();
+        builder.Services.AddTransient<AddTaskPage>();
+
 
         return builder.Build();
     }
