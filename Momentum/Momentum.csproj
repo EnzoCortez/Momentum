@@ -57,6 +57,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.3.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.1">
 		  <PrivateAssets>all</PrivateAssets>
@@ -72,9 +73,6 @@
 
 	<ItemGroup>
 	  <MauiXaml Update="View\AddTaskPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="View\TaskPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

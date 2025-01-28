@@ -7,7 +7,8 @@ using System.Text.Json.Serialization;
 public class TaskService
 {
     private static readonly HttpClient _httpClient = new HttpClient();
-    private const string ApiUrl = "http://localhost:5122/api/Task";  // ✅ URL base corregida
+    private const string ApiUrl = "http://192.168.100.117:5122/api/Task";  // Cambia localhost por tu IP local
+                                                                       
 
     public async Task<List<TaskItem>> GetTasksAsync()
     {

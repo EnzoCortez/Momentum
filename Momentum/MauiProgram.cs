@@ -18,7 +18,7 @@ public static class MauiProgram
         string dbPath = Path.Combine(FileSystem.AppDataDirectory, "Momentum.db3");
         builder.Services.AddSingleton<TaskDatabase>(s => new TaskDatabase(dbPath));
         builder.Services.AddSingleton<TaskViewModel>();
-        builder.Services.AddSingleton<TaskPage>();
+        builder.Services.AddSingleton<AddTaskPage>();
         builder.Services.AddTransient<AddTaskPage>();
 
 

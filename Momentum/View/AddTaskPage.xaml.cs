@@ -1,16 +1,16 @@
 ﻿using Momentum.ViewModels;
-using Momentum.Services;
 
-namespace Momentum.Views;
-
-public partial class AddTaskPage : ContentPage
+namespace Momentum.Views
 {
-    private TaskViewModel _viewModel;
-
-    public AddTaskPage(TaskDatabase database)
+    public partial class AddTaskPage : ContentPage
     {
-        InitializeComponent();
-        _viewModel = new TaskViewModel(database); // ✅ Pasar la base de datos
-        BindingContext = _viewModel;
+        public TaskViewModel ViewModel { get; private set; }
+
+        public AddTaskPage()
+        {
+            InitializeComponent();
+            ViewModel = new TaskViewModel(App.Database, App.ApiService);
+            BindingContext = ViewModel;
+        }
     }
 }
